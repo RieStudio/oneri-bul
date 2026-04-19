@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="OneriBul.Views.HistoryPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:services="clr-namespace:OneriBul.Services"
+    xmlns:vm="clr-namespace:OneriBul.ViewModels"
+    xmlns:models="clr-namespace:OneriBul.Models"
+    x:DataType="vm:HistoryViewModel"
+    Title=""
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarBackgroundColor="#1A1A1A">
+
+    <ContentPage.BindingContext>
+        <vm:HistoryViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid Padding="20">
+        <CollectionView ItemsSource="{Binding GroupedHistory}" IsGrouped="True">
+        <CollectionView.Header>
+            <VerticalStackLayout Spacing="20">
+                <Label
+                    Margin="0,20"
+                    Style="{StaticResource TitleLabel}"
+                    BindingContext="{x:Static services:LanguageService.Instance}"
+                    x:DataType="services:LanguageService"
+                    Text="{Binding Translations[HistoryTitle]}" />
+            </VerticalStackLayout>
+        </CollectionView.Header>
+        <CollectionView.GroupHeaderTemplate>
+            <DataTemplate x:DataType="vm:HistoryGroup">
+                <Label
+                    Padding="0,10"
+                    FontAttributes="Bold"
+                    FontSize="12"
+                    Text="{Binding Name}"
+                    TextColor="#555555" />
+            </DataTemplate>
+        </CollectionView.GroupHeaderTemplate>
+
+        <CollectionView.ItemTemplate>
+            <DataTemplate x:DataType="models:Recommendation">
+                <Grid
+                    Padding="0,15"
+                    ColumnDefinitions="Auto, *, Auto"
+                    ColumnSpacing="15">
+                    <Border
+                        BackgroundColor="#1E1E24"
+                        HeightRequest="40"
+                        StrokeShape="Ellipse"
+                        WidthRequest="40">
+                        <Grid IsClippedToBounds="True">
+                            <Image Aspect="AspectFill" Source="{Binding ImageUrl}" />
+                        </Grid>
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                        <Label FontAttributes="Bold" Text="{Binding Title}" />
+                        <Label FontSize="12" Text="{Binding Category}" TextColor="#7B42F6" />
+                    </VerticalStackLayout>
+                    <Label
+                        Grid.Column="2"
+                        Text="&gt;"
+                        TextColor="#555555"
+                        VerticalOptions="Center" />
+                </Grid>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
+    </Grid>
+</ContentPage>

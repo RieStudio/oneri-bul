@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="OneriBul.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:services="clr-namespace:OneriBul.Services"
+    xmlns:views="clr-namespace:OneriBul.Views"
+    Title="Öneri Bul"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.TabBarForegroundColor="#7B42F6"
+    Shell.TabBarUnselectedColor="#666666">
+
+    <TabBar>
+        <Tab Title="{Binding Source={x:Static services:LanguageService.Instance}, Path=Translations[DiscoverTab]}" 
+             Icon="ic_discover">
+            <ShellContent
+                Title="{Binding Source={x:Static services:LanguageService.Instance}, Path=Translations[DiscoverTab]}"
+                ContentTemplate="{DataTemplate views:DiscoverPage}"
+                Route="DiscoverPage" />
+        </Tab>
+        <Tab Title="{Binding Source={x:Static services:LanguageService.Instance}, Path=Translations[SavedTab]}"
+             Icon="ic_saved">
+            <ShellContent
+                Title="{Binding Source={x:Static services:LanguageService.Instance}, Path=Translations[SavedTab]}"
+                ContentTemplate="{DataTemplate views:SavedPage}"
+                Route="SavedPage" />
+        </Tab>
+        <Tab Title="{Binding Source={x:Static services:LanguageService.Instance}, Path=Translations[HistoryTab]}"
+             Icon="ic_history">
+            <ShellContent
+                Title="{Binding Source={x:Static services:LanguageService.Instance}, Path=Translations[HistoryTab]}"
+                ContentTemplate="{DataTemplate views:HistoryPage}"
+                Route="HistoryPage" />
+        </Tab>
+    </TabBar>
+
+</Shell>
