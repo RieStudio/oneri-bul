@@ -44,7 +44,7 @@ Open Config.cs and insert your API keys:
 
 ## Contact
 
-Arif Sevban KIRIT - arif@riestudio.com.tr
+RieStudio - contact@riestudio.com.tr
 Official Site: riestudio.com.tr
 
 ---
