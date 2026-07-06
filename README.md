@@ -50,4 +50,4 @@ RieStudio - contact@riestudio.com.tr
 Official Site: riestudio.com.tr
 
 ---
-Copyright 2026 RieStudio.
+Powered by RieStudio.
