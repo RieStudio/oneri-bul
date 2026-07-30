@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="OneriBul.Views.DiscoverPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:OneriBul.Models"
+    xmlns:services="clr-namespace:OneriBul.Services"
+    xmlns:vm="clr-namespace:OneriBul.ViewModels"
+    x:Name="page"
+    x:DataType="vm:DiscoverViewModel"
+    BackgroundColor="#000000"
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarBackgroundColor="Black">
+
+    <ContentPage.Resources>
+        <Style x:Key="CategoryBorderStyle" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="Stroke" Value="#222222" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 18" />
+            <Setter Property="StrokeThickness" Value="1" />
+        </Style>
+        <Style x:Key="CategoryLabelStyle" TargetType="Label">
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="TextColor" Value="White" />
+        </Style>
+    </ContentPage.Resources>
+
+    <ContentPage.BindingContext>
+        <vm:DiscoverViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="70, *">
+        <!--  Sticky Header Layer  -->
+        <Grid
+            Grid.Row="0"
+            Margin="20,10,20,10"
+            BackgroundColor="#000000"
+            ColumnDefinitions="Auto, *, Auto"
+            VerticalOptions="Fill"
+            ZIndex="99">
+            <!--  Left: Floating Version  -->
+            <Label
+                Grid.Column="0"
+                FontSize="12"
+                Opacity="0.8"
+                Text="v5.0.1"
+                TextColor="#BBBBBB"
+                VerticalOptions="Center" />
+
+            <!--  Right: Floating Language Selection Button  -->
+            <Button
+                Grid.Column="2"
+                Padding="10,0"
+                x:DataType="services:LanguageService"
+                BackgroundColor="Transparent"
+                BindingContext="{x:Static services:LanguageService.Instance}"
+                BorderWidth="0"
+                Command="{Binding ToggleMenuCommand}"
+                FontAttributes="Bold"
+                HeightRequest="40"
+                HorizontalOptions="End"
+                Text="{Binding CurrentLang}"
+                TextColor="#FFFFFF"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <!--  Floating Menu Overlay (Outside of Header Grid to not push it)  -->
+        <Border
+            Grid.Row="1"
+            Margin="0,0,20,0"
+            Padding="0"
+            BackgroundColor="#EE000000"
+            HorizontalOptions="End"
+            IsVisible="{Binding Source={x:Static services:LanguageService.Instance}, Path=IsLanguageMenuOpen}"
+            Stroke="#5E2BFF"
+            StrokeShape="RoundRectangle 8"
+            StrokeThickness="1"
+            VerticalOptions="Start"
+            WidthRequest="45"
+            ZIndex="1000">
+            <VerticalStackLayout Spacing="0">
+                <Button
+                    Padding="0"
+                    BackgroundColor="Transparent"
+                    BorderWidth="0"
+                    Command="{Binding Source={x:Static services:LanguageService.Instance}, Path=SelectLangCommand}"
+                    CommandParameter="TR"
+                    FontAttributes="Bold"
+                    HeightRequest="35"
+                    Text="TR"
+                    TextColor="#5E2BFF" />
+                <BoxView
+                    Margin="5,0"
+                    HeightRequest="1"
+                    Color="#333333" />
+                <Button
+                    Padding="0"
+                    BackgroundColor="Transparent"
+                    BorderWidth="0"
+                    Command="{Binding Source={x:Static services:LanguageService.Instance}, Path=SelectLangCommand}"
+                    CommandParameter="EN"
+                    FontAttributes="Bold"
+                    HeightRequest="35"
+                    Text="EN"
+                    TextColor="#5E2BFF" />
+            </VerticalStackLayout>
+        </Border>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="30" Spacing="25">
+                <!--  Header  -->
+                <Label
+                    Margin="0,20,0,30"
+                    x:DataType="services:LanguageService"
+                    BindingContext="{x:Static services:LanguageService.Instance}"
+                    FontAttributes="Bold"
+                    FontSize="32"
+                    LineHeight="1.1"
+                    Text="{Binding Translations[DiscoverTitle]}"
+                    TextColor="White" />
+
+                <!--  Mood Selection  -->
+                <FlexLayout
+                    Margin="0,0,0,20"
+                    BindableLayout.ItemsSource="{Binding Moods}"
+                    Direction="Row"
+                    JustifyContent="SpaceBetween"
+                    Wrap="NoWrap">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:Mood">
+                            <VerticalStackLayout Spacing="8" WidthRequest="55">
+                                <VerticalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DiscoverViewModel}}, Path=SelectMoodCommand}" CommandParameter="{Binding .}" />
+                                </VerticalStackLayout.GestureRecognizers>
+
+                                <Border
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="55"
+                                    Stroke="#1A1A1A"
+                                    StrokeShape="RoundRectangle 27.5"
+                                    StrokeThickness="2"
+                                    WidthRequest="55">
+                                    <Border.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding IsSelected}"
+                                            TargetType="Border"
+                                            Value="True">
+                                            <Setter Property="Stroke" Value="#5E2BFF" />
+                                            <Setter Property="BackgroundColor" Value="#1A0D33" />
+                                        </DataTrigger>
+                                    </Border.Triggers>
+                                    <Label
+                                        FontSize="22"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Emoji}"
+                                        VerticalOptions="Center" />
+                                </Border>
+
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="9"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding Subtext}"
+                                    TextColor="#666666">
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding IsSelected}"
+                                            TargetType="Label"
+                                            Value="True">
+                                            <Setter Property="TextColor" Value="#5E2BFF" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+
+                <!--  Category Selection  -->
+                <!--  Category & Platform Group (Tighter Spacing)  -->
+                <VerticalStackLayout Spacing="0">
+                    <!--  Categories Grid  -->
+                    <Grid
+                        ColumnDefinitions="*,*,*,*"
+                        ColumnSpacing="10">
+                        
+                        <!--  Filmler  -->
+                        <Border Grid.Column="0" Padding="5,10" Style="{StaticResource CategoryBorderStyle}">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SelectCategoryCommand}" CommandParameter="{Binding Categories[0]}" />
+                            </Border.GestureRecognizers>
+                            <Border.Triggers>
+                                <DataTrigger Binding="{Binding Categories[0].IsSelected}" TargetType="Border" Value="True">
+                                    <Setter Property="BackgroundColor" Value="#7B42F6" />
+                                    <Setter Property="Stroke" Value="Transparent" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <ScrollView HorizontalScrollBarVisibility="Never" Orientation="Horizontal" IsClippedToBounds="True" InputTransparent="True">
+                                <Label x:Name="CatLabel0" Text="{Binding Categories[0].Name}" Style="{StaticResource CategoryLabelStyle}" />
+                            </ScrollView>
+                        </Border>
+
+                        <!--  Diziler  -->
+                        <Border Grid.Column="1" Padding="5,10" Style="{StaticResource CategoryBorderStyle}">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SelectCategoryCommand}" CommandParameter="{Binding Categories[1]}" />
+                            </Border.GestureRecognizers>
+                            <Border.Triggers>
+                                <DataTrigger Binding="{Binding Categories[1].IsSelected}" TargetType="Border" Value="True">
+                                    <Setter Property="BackgroundColor" Value="#7B42F6" />
+                                    <Setter Property="Stroke" Value="Transparent" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <ScrollView HorizontalScrollBarVisibility="Never" Orientation="Horizontal" IsClippedToBounds="True" InputTransparent="True">
+                                <Label x:Name="CatLabel1" Text="{Binding Categories[1].Name}" Style="{StaticResource CategoryLabelStyle}" />
+                            </ScrollView>
+                        </Border>
+
+                        <!--  Oyunlar  -->
+                        <Border Grid.Column="2" Padding="5,10" Style="{StaticResource CategoryBorderStyle}">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SelectCategoryCommand}" CommandParameter="{Binding Categories[2]}" />
+                            </Border.GestureRecognizers>
+                            <Border.Triggers>
+                                <DataTrigger Binding="{Binding Categories[2].IsSelected}" TargetType="Border" Value="True">
+                                    <Setter Property="BackgroundColor" Value="#7B42F6" />
+                                    <Setter Property="Stroke" Value="Transparent" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <ScrollView HorizontalScrollBarVisibility="Never" Orientation="Horizontal" IsClippedToBounds="True" InputTransparent="True">
+                                <Label x:Name="CatLabel2" Text="{Binding Categories[2].Name}" Style="{StaticResource CategoryLabelStyle}" />
+                            </ScrollView>
+                        </Border>
+
+                        <!--  Kitaplar  -->
+                        <Border Grid.Column="3" Padding="5,10" Style="{StaticResource CategoryBorderStyle}">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SelectCategoryCommand}" CommandParameter="{Binding Categories[3]}" />
+                            </Border.GestureRecognizers>
+                            <Border.Triggers>
+                                <DataTrigger Binding="{Binding Categories[3].IsSelected}" TargetType="Border" Value="True">
+                                    <Setter Property="BackgroundColor" Value="#7B42F6" />
+                                    <Setter Property="Stroke" Value="Transparent" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <ScrollView HorizontalScrollBarVisibility="Never" Orientation="Horizontal" IsClippedToBounds="True" InputTransparent="True">
+                                <Label x:Name="CatLabel3" Text="{Binding Categories[3].Name}" Style="{StaticResource CategoryLabelStyle}" />
+                            </ScrollView>
+                        </Border>
+                    </Grid>
+
+                    <!--  Connecting Indicator (Arrow)  -->
+                    <Grid ColumnDefinitions="*,*,*,*" HeightRequest="8" IsVisible="{Binding IsPlatformVisible}">
+                        <Path
+                            x:Name="PlatformLine"
+                            Grid.Column="2"
+                            Data="M 0,0 L 5,8 L 10,0 Z"
+                            Fill="#7B42F6"
+                            HorizontalOptions="Center"
+                            Scale="0"
+                            VerticalOptions="Start"
+                            WidthRequest="10" />
+                    </Grid>
+
+                    <!--  Integrated Platform Selector (Segmented Control)  -->
+                    <Border
+                        x:Name="PlatformSelector"
+                        Padding="1"
+                        BackgroundColor="#1A1A1A"
+                        HorizontalOptions="Center"
+                        IsVisible="{Binding IsPlatformVisible}"
+                        Opacity="0"
+                        Stroke="#333333"
+                        StrokeShape="RoundRectangle 20"
+                        StrokeThickness="1"
+                        WidthRequest="280">
+                        <Grid ColumnDefinitions="*,*,*" HeightRequest="40">
+                            <!--  PC  -->
+                            <Button
+                                Grid.Column="0"
+                                BackgroundColor="Transparent"
+                                Command="{Binding SelectPlatformCommand}"
+                                CommandParameter="{Binding Platforms[0]}"
+                                CornerRadius="20"
+                                FontSize="10"
+                                Text="🖥️ PC"
+                                TextColor="White">
+                                <Button.Triggers>
+                                    <DataTrigger Binding="{Binding Platforms[0].IsSelected}" TargetType="Button" Value="True">
+                                        <Setter Property="BackgroundColor" Value="#7B42F6" />
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+                            
+                            <!--  Separator  -->
+                            <BoxView Grid.Column="0" HorizontalOptions="End" WidthRequest="1" Color="#333333" Margin="0,8" />
+
+                            <!--  Mobil  -->
+                            <Button
+                                Grid.Column="1"
+                                BackgroundColor="Transparent"
+                                Command="{Binding SelectPlatformCommand}"
+                                CommandParameter="{Binding Platforms[1]}"
+                                CornerRadius="20"
+                                FontSize="10"
+                                Text="📱 Mobil"
+                                TextColor="White">
+                                <Button.Triggers>
+                                    <DataTrigger Binding="{Binding Platforms[1].IsSelected}" TargetType="Button" Value="True">
+                                        <Setter Property="BackgroundColor" Value="#7B42F6" />
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+
+                            <!--  Separator  -->
+                            <BoxView Grid.Column="1" HorizontalOptions="End" WidthRequest="1" Color="#333333" Margin="0,8" />
+
+                            <!--  Konsol  -->
+                            <Button
+                                Grid.Column="2"
+                                BackgroundColor="Transparent"
+                                Command="{Binding SelectPlatformCommand}"
+                                CommandParameter="{Binding Platforms[2]}"
+                                CornerRadius="20"
+                                FontSize="10"
+                                Text="🎮 Konsol"
+                                TextColor="White">
+                                <Button.Triggers>
+                                    <DataTrigger Binding="{Binding Platforms[2].IsSelected}" TargetType="Button" Value="True">
+                                        <Setter Property="BackgroundColor" Value="#7B42F6" />
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    
+                    <BoxView HeightRequest="25" IsVisible="{Binding IsPlatformVisible}" />
+                </VerticalStackLayout>
+
+                <!--  Action Button  -->
+                <Button
+                    Margin="0,0,0,30"
+                    Command="{Binding FindRecommendationCommand}"
+                    CornerRadius="15"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    HeightRequest="65"
+                    IsEnabled="{Binding IsButtonEnabled}"
+                    Opacity="{Binding ButtonOpacity}"
+                    Text="{Binding ButtonText}"
+                    TextColor="White">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Offset="0.1" Color="#7B42F6" />
+                            <GradientStop Offset="1.0" Color="#3B82F6" />
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
+
+                <!--  Recommendation Result  -->
+                <ActivityIndicator
+                    Margin="0,20"
+                    IsRunning="{Binding IsLoading}"
+                    IsVisible="{Binding IsLoading}"
+                    Color="#5E2BFF" />
+
+                <Grid IsVisible="{Binding ShowRecommendation}">
+                    <Border
+                        Padding="20"
+                        BackgroundColor="#121212"
+                        Stroke="#1A1A1A"
+                        StrokeShape="RoundRectangle 24"
+                        StrokeThickness="1">
+                        <VerticalStackLayout Spacing="25">
+
+                            <Grid ColumnDefinitions="120, *" ColumnSpacing="20">
+                                <!--  Poster Image Content  -->
+                                <Border Grid.Column="0" StrokeShape="RoundRectangle 8">
+                                    <Grid IsClippedToBounds="True">
+                                        <Image
+                                            Aspect="AspectFill"
+                                            BackgroundColor="#113333"
+                                            HeightRequest="130"
+                                            Source="{Binding CurrentRecommendation.ImageUrl}" />
+
+                                        <!--  Rating Badge  -->
+                                        <Border
+                                            Margin="5"
+                                            Padding="4,2"
+                                            BackgroundColor="#CC000000"
+                                            HorizontalOptions="End"
+                                            StrokeShape="RoundRectangle 6"
+                                            StrokeThickness="0"
+                                            VerticalOptions="Start">
+                                            <Border.Triggers>
+                                                <DataTrigger
+                                                    Binding="{Binding CurrentRecommendation.Rating}"
+                                                    TargetType="Border"
+                                                    Value="0">
+                                                    <Setter Property="IsVisible" Value="False" />
+                                                </DataTrigger>
+                                            </Border.Triggers>
+                                            <HorizontalStackLayout Spacing="2">
+                                                <Label
+                                                    FontSize="10"
+                                                    Text="⭐"
+                                                    VerticalOptions="Center" />
+                                                <Label
+                                                    FontAttributes="Bold"
+                                                    FontSize="11"
+                                                    Text="{Binding CurrentRecommendation.Rating, StringFormat='{0:0.0}'}"
+                                                    TextColor="#FFD700"
+                                                    VerticalOptions="Center" />
+                                            </HorizontalStackLayout>
+                                        </Border>
+                                    </Grid>
+                                    <Border.Shadow>
+                                        <Shadow
+                                            Brush="Black"
+                                            Opacity="0.5"
+                                            Radius="10"
+                                            Offset="0,5" />
+                                    </Border.Shadow>
+                                </Border>
+
+                                <VerticalStackLayout
+                                    Grid.Column="1"
+                                    Spacing="6"
+                                    VerticalOptions="Center">
+                                    <ScrollView
+                                        HorizontalOptions="FillAndExpand"
+                                        HorizontalScrollBarVisibility="Never"
+                                        Orientation="Horizontal">
+                                        <Label
+                                            CharacterSpacing="1"
+                                            FontAttributes="Bold"
+                                            FontSize="11"
+                                            LineBreakMode="NoWrap"
+                                            Text="{Binding CurrentRecommendation.Category}"
+                                            TextColor="#7B42F6"
+                                            TextTransform="Uppercase" />
+                                    </ScrollView>
+
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="24"
+                                        LineBreakMode="WordWrap"
+                                        Text="{Binding CurrentRecommendation.Title}"
+                                        TextColor="White" />
+
+                                    <HorizontalStackLayout Margin="0,8,0,0" Spacing="8">
+                                        <Border
+                                            Padding="10,4"
+                                            BackgroundColor="#1A1A1A"
+                                            StrokeShape="RoundRectangle 8"
+                                            StrokeThickness="0">
+                                            <Label
+                                                FontSize="11"
+                                                Text="{Binding CurrentRecommendation.Year}"
+                                                TextColor="#999999" />
+                                        </Border>
+
+                                        <!-- Genre Badge (Adaptive & Marquee ready) -->
+                                        <Border
+                                            x:Name="GenreBorder"
+                                            Padding="10,4"
+                                            BackgroundColor="#221A35"
+                                            HorizontalOptions="Center"
+                                            MaximumWidthRequest="100"
+                                            Stroke="#3D2B5E"
+                                            StrokeShape="RoundRectangle 8"
+                                            StrokeThickness="1">
+                                            <Border.Triggers>
+                                                <DataTrigger Binding="{Binding CurrentRecommendation.Genre}" TargetType="Border" Value="">
+                                                    <Setter Property="IsVisible" Value="False" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding CurrentRecommendation.Genre}" TargetType="Border" Value="{x:Null}">
+                                                    <Setter Property="IsVisible" Value="False" />
+                                                </DataTrigger>
+                                            </Border.Triggers>
+                                            <Grid IsClippedToBounds="True">
+                                                <ScrollView HorizontalScrollBarVisibility="Never" Orientation="Horizontal" InputTransparent="True">
+                                                    <Label
+                                                        x:Name="GenreLabel"
+                                                        FontSize="11"
+                                                        FontAttributes="Bold"
+                                                        HorizontalOptions="Center"
+                                                        LineBreakMode="NoWrap"
+                                                        Text="{Binding CurrentRecommendation.Genre}"
+                                                        TextColor="#B39DDB" />
+                                                </ScrollView>
+                                            </Grid>
+                                        </Border>
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <BoxView
+                                Margin="0,-5"
+                                HeightRequest="1"
+                                Color="#1A1A1A" />
+
+                            <VerticalStackLayout Spacing="10">
+                                <Label
+                                    x:DataType="services:LanguageService"
+                                    BindingContext="{x:Static services:LanguageService.Instance}"
+                                    CharacterSpacing="1"
+                                    FontAttributes="Bold"
+                                    FontSize="11"
+                                    Text="{Binding Translations[Why]}"
+                                    TextColor="#555555" />
+                                <Label
+                                    FontSize="14"
+                                    LineBreakMode="WordWrap"
+                                    LineHeight="1.5"
+                                    Text="{Binding CurrentRecommendation.Description}"
+                                    TextColor="#999999" />
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!--  Save Button at Top Right  -->
+                    <Button
+                        Margin="15,15,15,0"
+                        Padding="0"
+                        BackgroundColor="#66000000"
+                        Command="{Binding SaveRecommendationCommand}"
+                        CornerRadius="22"
+                        FontSize="18"
+                        HeightRequest="45"
+                        HorizontalOptions="End"
+                        Text="🤍"
+                        VerticalOptions="Start"
+                        WidthRequest="45"
+                        ZIndex="1">
+                        <Button.Triggers>
+                            <DataTrigger
+                                Binding="{Binding CurrentRecommendation.IsSaved}"
+                                TargetType="Button"
+                                Value="True">
+                                <Setter Property="Text" Value="❤️" />
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+                </Grid>
+
+                <!--  Footer  -->
+                <HorizontalStackLayout
+                    Margin="0,15,0,20"
+                    HorizontalOptions="Center"
+                    Opacity="0.8"
+                    Spacing="5">
+                    <Label
+                        FontAttributes="Italic"
+                        FontSize="11"
+                        Text="powered by"
+                        TextColor="#777777"
+                        VerticalOptions="Center" />
+                    <Image
+                        Margin="0,3,0,0"
+                        HeightRequest="68"
+                        Source="riestudio_logo.png"
+                        VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

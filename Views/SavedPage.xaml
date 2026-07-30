@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="OneriBul.Views.SavedPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:services="clr-namespace:OneriBul.Services"
+    xmlns:vm="clr-namespace:OneriBul.ViewModels"
+    xmlns:models="clr-namespace:OneriBul.Models"
+    x:DataType="vm:SavedViewModel"
+    Title=""
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarBackgroundColor="#1A1A1A">
+
+    <ContentPage.BindingContext>
+        <vm:SavedViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid Padding="20">
+        <CollectionView ItemsSource="{Binding SavedItems}">
+        <CollectionView.Header>
+            <VerticalStackLayout Spacing="20">
+                <Label
+                    Margin="0,20"
+                    Style="{StaticResource TitleLabel}"
+                    BindingContext="{x:Static services:LanguageService.Instance}"
+                    x:DataType="services:LanguageService"
+                    Text="{Binding Translations[SavedTitle]}" />
+            </VerticalStackLayout>
+        </CollectionView.Header>
+        <CollectionView.ItemsLayout>
+            <GridItemsLayout
+                HorizontalItemSpacing="10"
+                Orientation="Vertical"
+                Span="2"
+                VerticalItemSpacing="10" />
+        </CollectionView.ItemsLayout>
+        <CollectionView.ItemTemplate>
+            <DataTemplate x:DataType="models:Recommendation">
+                <VerticalStackLayout Spacing="8">
+                    <Border
+                        BackgroundColor="#113333"
+                        HeightRequest="200"
+                        StrokeShape="RoundRectangle 15">
+                        <Grid IsClippedToBounds="True">
+                            <Image Aspect="AspectFill" Source="{Binding ImageUrl}" />
+                        </Grid>
+                    </Border>
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="14"
+                        Text="{Binding Title}" />
+                    <Label
+                        FontSize="12"
+                        Text="{Binding Category}"
+                        TextColor="#7B42F6" />
+                </VerticalStackLayout>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+
+</ContentPage>

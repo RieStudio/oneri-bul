@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <style name="MainTheme" parent="Maui.MainTheme">
+    <!-- Customize the ripple color for all buttons and tabs -->
+    <item name="android:colorControlHighlight">#20FFFFFF</item>
+  </style>
+</resources>
