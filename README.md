@@ -1,20 +1,35 @@
 # Oneri Bul
 
 <p align="center">
-  <img src=".github/assets/oneribullogo.png" width="400">
+  <img src=".github/assets/oneribullogo.png" width="280">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/PLATFORM-ANDROID%20%7C%20iOS-3DDC84?style=for-the-badge">
+  <img src="https://img.shields.io/badge/FRAMEWORK-.NET%20MAUI-512BD4?style=for-the-badge&logo=dotnet&logoColor=white">
+  <img src="https://img.shields.io/badge/LANGUAGE-C%23-239120?style=for-the-badge&logo=csharp&logoColor=white">
+  <img src="https://img.shields.io/badge/LICENSE-MIT-0078D4?style=for-the-badge">
+</p>
+
+<p align="center">
+Developed by <a href="https://github.com/RieStudio">RieStudio</a>
 </p>
 
 ## Overview
 
-Öneri Bul is an AI-powered recommendation application that helps users discover movies, books, and games based on their current mood. Instead of browsing through endless lists, users simply describe how they feel, and the application analyzes their input to generate personalized recommendations within seconds.
+"Oneri Bul" is an AI-powered recommendation app that helps users discover films, books and games based on their current mood. Rather than having to scroll through endless lists one by one, users simply select how they’re feeling; the app then analyses this information and provides personalised recommendations within seconds.
+
+---
+
 ## Screenshots
 
-- Framework: .NET 9.0 (MAUI)
-- Architecture: MVVM
-- AI Engine: Google Gemini API
-- Movie Data: TMDB API
-- Game Data: RAWG API
-- Language: C# / XAML
+<p align="center">
+  <img src=".github/assets/oneribul2.jpg" width="30%">
+  <img src=".github/assets/oneribul3.jpg" width="30%">
+  <img src=".github/assets/oneribul1.jpg" width="30%">
+</p>
+
+---
 
 ## Features
 
@@ -27,6 +42,8 @@
 - Fast and responsive user experience
 - Lightweight and modern architecture
 - Persistent user preferences
+
+---
 
 ## Architecture
 
@@ -41,15 +58,21 @@ The project follows the **MVVM (Model-View-ViewModel)** architecture to provide 
 
 This architecture keeps the codebase modular, scalable, and easy to maintain while supporting future feature expansion.
 
+---
+
 ## Tech Stack
 
-- **Framework:** .NET MAUI
-- **Language:** C#
-- **Architecture:** MVVM
-- **AI:** Google Gemini API
-- **Movie Data:** TMDb API
-- **Book Data:** Google Books API
-- **Game Data:** RAWG API
+| Category | Technology |
+|----------|------------|
+| **Framework** | .NET MAUI |
+| **Language** | C# |
+| **Architecture** | MVVM |
+| **AI Model** | Google Gemini |
+| **Movie Database** | TMDb |
+| **Book Database** | Google Books |
+| **Game Database** | RAWG |
+
+---
 
 ## Getting Started
 
@@ -60,6 +83,8 @@ git clone https://github.com/RieStudio/OneriBul.git
 ```
 
 Open the project in Android Studio and run the Android target.
+
+---
 
 ## License
 
