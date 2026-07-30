@@ -76,13 +76,15 @@ This architecture keeps the codebase modular, scalable, and easy to maintain whi
 
 ## Getting Started
 
-Clone the repository.
+1. Clone the repository.
 
 ```bash
 git clone https://github.com/RieStudio/OneriBul.git
 ```
 
-Open the project in Android Studio and run the Android target.
+2. Open `OneriBul.sln` in Visual Studio or JetBrains Rider.
+
+3. Build and run the project.
 
 ---
 
